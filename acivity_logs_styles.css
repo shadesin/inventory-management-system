@@ -1,0 +1,42 @@
+/* activity_logs_styles.css */
+
+body {
+    font-family: Arial, sans-serif; /* Choose a preferred font family */
+    background-color: #f2f2f2; /* Set background color */
+    margin: 0; /* Remove default margin from body */
+    padding: 20px; /* Add some padding for aesthetics */
+}
+
+.container {
+    max-width: 800px; /* Set maximum width for the container */
+    margin: 0 auto; /* Center the container horizontally */
+    background-color: #fff; /* Set background color for the container */
+    padding: 20px; /* Add padding for better spacing */
+    border-radius: 8px; /* Add rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+}
+
+h2 {
+    font-size: 28px; /* Set font size for headings */
+    margin-bottom: 20px; /* Add spacing below headings */
+    color: #333; /* Set text color */
+}
+
+table {
+    width: 100%; /* Make table fill the container width */
+    border-collapse: collapse; /* Collapse borders for cleaner look */
+}
+
+table th, table td {
+    padding: 10px; /* Add padding for cells */
+    border: 1px solid #ddd; /* Add borders for cells */
+    text-align: left; /* Align text to the left */
+}
+
+table th {
+    background-color: #f2f2f2; /* Set background color for table header */
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Set background color for even rows */
+}

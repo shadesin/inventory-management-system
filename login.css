@@ -1,0 +1,57 @@
+/* login.css */
+
+body {
+    font-family: Arial, sans-serif; /* Choose a preferred font family */
+    margin: 0; /* Remove default margin from body */
+    padding: 20px; /* Add some padding for aesthetics */
+    background-color: #f2f2f2; /* Set background color */
+}
+
+h2 {
+    text-align: center; /* Center the login heading */
+    margin-bottom: 20px; /* Add spacing below the heading */
+}
+
+form {
+    width: 300px; /* Set a fixed width for the form */
+    margin: 0 auto; /* Center the form horizontally */
+    padding: 20px; /* Add padding for better spacing */
+    border: 1px solid #ccc; /* Add a subtle border */
+    border-radius: 5px; /* Add rounded corners for a smoother look */
+    background-color: #fff; /* Set background color for the form */
+}
+
+label {
+    display: block; /* Make labels appear on separate lines */
+    margin-bottom: 8px; /* Add spacing between labels and inputs */
+}
+
+input[type="text"],
+input[type="password"] {
+    width: calc(100% - 22px); /* Make input fields fill the available width */
+    padding: 10px; /* Add padding for better user experience */
+    margin-bottom: 15px; /* Add spacing between input fields */
+    border: 1px solid #ccc; /* Add borders for inputs */
+    border-radius: 3px; /* Add rounded corners for inputs */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+button[type="submit"] {
+    background-color: #4CAF50; /* Set button background color */
+    color: white; /* Set button text color */
+    padding: 10px 20px; /* Add padding for the button */
+    border: none; /* Remove default button border */
+    border-radius: 5px; /* Add rounded corners for the button */
+    cursor: pointer; /* Set cursor style to indicate clickability */
+    width: 100%; /* Make button fill the width of its container */
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049; /* Change background color on hover */
+}
+
+p.error {
+    color: red; /* Set error message color */
+    text-align: center; /* Center the error message */
+    margin-top: 10px; /* Add spacing above the error message */
+}

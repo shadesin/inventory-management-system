@@ -1,0 +1,115 @@
+1. use of trigger for logging order placingg by a customer
+
+DELIMITER //
+
+CREATE TRIGGER after_order_insert
+AFTER INSERT ON orderdetails
+FOR EACH ROW
+BEGIN
+    INSERT INTO user_activity (user_id, activity, timestamp)
+    VALUES (NEW.cid, 'Placed an order', NOW());
+END //
+
+DELIMITER ;
+
+Explanation:
+Trigger: The trigger after_order_insert automatically logs the activity to the user_activity table whenever a new order is placed in the orderdetails table.
+Checkout PHP Script: The PHP script calculates the cart total, shipping cost, and subtotal. When the user confirms the order, it inserts the order into the orderdetails table and clears the cart. The trigger then logs the activity automatically.
+Displaying Cart Items: The cart items are displayed with their name, price, quantity, and total price per item. The subtotal, shipping cost, and total are calculated and displayed as well.
+This setup ensures that the logging is handled by the database trigger, simplifying the PHP code and centralizing the logging logic within the database itself.
+
+
+2. Use of view to display cart items
+
+CREATE VIEW view_cart_items AS
+SELECT ci.user_id, ci.product_id, ci.quantity, p.title, p.price
+FROM cart_items ci
+INNER JOIN product p ON ci.product_id = p.pid;
+
+Updated the view_cart.php file
+
+Explanation:
+View Creation: The SQL statement creates a view named view_cart_items that joins the cart_items and product tables.
+Fetch Data from View: The PHP script is updated to fetch cart items from the view_cart_items view instead of directly querying the cart_items and product tables.
+Display Cart Items: The script displays the cart items including the product name, quantity, price, and total price for each item. If the quantity is more than one, it shows the detailed price calculation.
+Remove Functionality: The remove functionality is preserved. When a user removes an item, the quantity in the cart is decreased or the item is deleted if the quantity reaches zero. The inventory is updated accordingly.
+Using a view in this way abstracts the data retrieval logic, making the PHP script cleaner and potentially improving performance if the view can be optimized by the database.
+
+
+3. nested query
+SELECT u.username
+FROM users u
+WHERE u.id IN (
+    SELECT o.cid
+    FROM orderdetails o
+    GROUP BY o.cid
+    HAVING COUNT(o.orderid) > ?
+)
+Explanation of the Nested Query
+The nested query within the users_sql statement checks for users who have more than a certain number of orders:
+The outer query selects usernames from the users table.
+The inner query selects user IDs (o.cid) from the orderdetails table, groups them by user ID, and uses HAVING COUNT(o.orderid) > ? to filter groups that have more than the specified number of orders.
+The result of the inner query is used by the outer query to filter the usernames.
+
+
+The statistics.php code has been updated with this nested query
+
+4. pl/sql procedures
+pl/sql procedures have been created to calculate the total shipping cost and to process the order:
+DELIMITER //
+
+CREATE PROCEDURE calculate_shipping_cost(
+    IN p_total DECIMAL(10, 2),
+    OUT p_shipping_cost DECIMAL(10, 2)
+)
+BEGIN
+    SET p_shipping_cost = p_total * 0.02;
+END //
+
+CREATE PROCEDURE process_order(
+    IN p_user_id INT,
+    IN p_total DECIMAL(10, 2),
+    IN p_subtotal DECIMAL(10, 2),
+    IN p_shipping_cost DECIMAL(10, 2)
+)
+BEGIN
+    -- Insert order into database
+    INSERT INTO orderdetails (status, subtotal, shipping, total, createdat, updatedat, cid)
+    VALUES ('Pending', p_subtotal, p_shipping_cost, p_total, NOW(), NOW(), p_user_id);
+END //
+
+DELIMITER ;
+
+Calling calculate_shipping_cost Procedure:
+The procedure calculate_shipping_cost is called to calculate the shipping cost based on the subtotal.
+The result of the shipping cost is retrieved using a subsequent SELECT query.
+Processing Order:
+Upon form submission, it checks if the cart is not empty.
+The process_order procedure is called to insert the order details into the database.
+The cart is cleared after the order is processed.
+
+The checkout.php file is updated by including calls to both procedures.
+
+
+5. string matches
+LIKE operator is used in admin_inventory.php to search for a product.
+
+6. Aggregate functions
+count() and avg functions are used in get_category_stats.php to display the no. of products and average price of products
+
+7. Set operations
+Set operation EXCEPT has been used in get_available_products.php to find the products that are in the inventory but not in the cart of any customer.
+
+// SQL query to get products available in inventory but not in any cart using EXCEPT
+$sql = "
+    SELECT p.pid, p.title, p.price, p.summary, p.updatedat
+    FROM product p
+    INNER JOIN inventory i ON p.pid = i.pid
+    EXCEPT
+    SELECT p.pid, p.title, p.price, p.summary, p.updatedat
+    FROM product p
+    INNER JOIN inventory i ON p.pid = i.pid
+    INNER JOIN cart_items ci ON p.pid = ci.product_id
+";
+
+
