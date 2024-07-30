@@ -23,6 +23,7 @@ FUNCTIONS ACHIEVED:
 •	Products can be added to and removed from his cart by a customer.
 •	The customers can see the list of items they have added to their carts along with their shipping charges, the subtotal and the grand total once they proceed to checkout. They can then decide to place the order or go back to the cart to add or remove more products.
 •	Every customer can check their individual order history containing the details of their past orders.
+
 TOOLS USED:
 1.	HTML (Developing the frontend)
 2.	CSS (Styling the frontend)
